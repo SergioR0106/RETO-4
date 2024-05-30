@@ -161,12 +161,16 @@ def req_6(control, n_aeropuertos):
     delta_time = deltaTime(start_time, stop_time)
     return delta_time, llave_primer, respuesta
 
-def req_7(control):
+def req_7(control, origen, destino):
     """
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    pass
+    start_time = getTime()
+    res, aero_origen, aero_destino, datos_aeropuertos, tiempo_total, distancia_total = model.req_7(control, origen, destino)
+    stop_time = getTime()
+    delta_time = deltaTime(start_time, stop_time)
+    return delta_time, res, aero_origen, aero_destino, datos_aeropuertos, tiempo_total, distancia_total
 
 
 def req_8(control):

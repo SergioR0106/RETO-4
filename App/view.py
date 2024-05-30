@@ -298,13 +298,24 @@ def print_req_6(control, n_aeropuertos):
         print('La distancia total del camino es: ' + str(trayecto['distancia_trayecto']) + ' Km')
         
         
-def print_req_7(control):
+def print_req_7(control, origen, destino):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
-
+    delta_time, res, aero_origen, aero_destino, datos_aeropuertos, tiempo_total, distancia_total = controller.req_7(control, origen, destino)
+    print('Tiempo de ejecucion: ' + str(delta_time) + ' [ms]')
+    if res:
+        print('Distancia total del trayecto: ' + str(distancia_total) + ' Km')
+        print('Tiempo de duracion del trayecto: ' + str(tiempo_total) + ' Min')
+        print('El numero de aeropuertos que visita el camino es: ' + str(lt.size(datos_aeropuertos)))
+        print('El trayecto mas corto en cuestion de tiempo entre ' + str(aero_origen) + ' y ' + str(aero_destino) + ' es:')
+        print(tabulate(lt.iterator(datos_aeropuertos), headers="keys", tablefmt="grid")) 
+    elif res == False:
+        print('NO EXISTE CAMINO')
+        print('El aeropuerto mas cercano al punto de origen es: ' + str(aero_origen))
+        print('El aeropuerto mas cercano al punto de destino es: ' + str(aero_destino))
+    
 
 def print_req_8(control):
     """
@@ -361,7 +372,14 @@ def menu_cycle():
             print_req_6(control, n_aeropuertos)
 
         elif int(inputs) == 8:
-            print_req_7(control)
+            lat_origen = float(input('INGRESE LA LATITUD DE ORIGEN: '))
+            long_origen = float(input('INGRESE LA LONGITUD DE ORIGEN: '))
+            lat_destino = float(input('INGRESE LA LATITUD DE DESTINO: '))
+            long_destino = float(input('INGRESE LA LONGITUD DE DESTINO: '))
+            origen = (lat_origen, long_origen)
+            destino = (lat_destino, long_destino)
+            print_req_7(control, origen, destino)
+            
 
         elif int(inputs) == 9:
             print_req_8(control)

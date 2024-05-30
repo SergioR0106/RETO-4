@@ -376,39 +376,39 @@ def req_1(data_structs, origen, destino):
         distancia_destino = haversine(destino, data_structs['coords'][aeropuerto])
         if distancia_origen <= 30:
             aero_origen = aeropuerto
-            print(aeropuerto)
+            
         if distancia_destino <= 30:
             aero_destino = aeropuerto
-            print(aero_destino)
-        if aero_destino != None and aero_origen != None:
-            data_structs['caminos_comercial_time'] = djk.Dijkstra(data_structs['graph_comercial_time'], aero_origen)
-            data_structs['caminos_comercial_distancia'] = djk.Dijkstra(data_structs['graph_comercial_distancia'], aero_origen)
-            res = djk.hasPathTo(data_structs['caminos_comercial_distancia'], aero_destino)
             
-            camino_tiempo = djk.pathTo(data_structs['caminos_comercial_time'], aero_destino)
-            camino_distancia = djk.pathTo(data_structs['caminos_comercial_distancia'], aero_destino)
-            
-            while not st.isEmpty(camino_distancia):
-                parada = st.pop(camino_distancia)
-                distancia_total = distancia_total + parada['weight']
-            
-            tiempo_total = 0
-            aeropuertos_visitados = []
-            while not st.isEmpty(camino_tiempo):
-                parada = st.pop(camino_tiempo)
-                tiempo_total = tiempo_total + parada['weight']
-                aeropuertos_visitados.append(parada['vertexA'])
-            
-            aeropuertos_visitados.append(aero_destino)
-            mapa_aeropuertos = mp.newMap()
-            
-            for aero in aeropuertos_visitados:
-                for coso in lt.iterator(data_structs['airports']):
-                    if coso['ICAO'] == aero:
-                        mp.put(mapa_aeropuertos, aero, coso) 
-            
-            distancia_total = distancia_destino + distancia_origen
-            return res, aero_origen, aero_destino, aeropuertos_visitados, distancia_total, tiempo_total, mapa_aeropuertos 
+    if aero_destino != None and aero_origen != None:
+        data_structs['caminos_comercial_time'] = djk.Dijkstra(data_structs['graph_comercial_time'], aero_origen)
+        data_structs['caminos_comercial_distancia'] = djk.Dijkstra(data_structs['graph_comercial_distancia'], aero_origen)
+        res = djk.hasPathTo(data_structs['caminos_comercial_distancia'], aero_destino)
+        
+        camino_tiempo = djk.pathTo(data_structs['caminos_comercial_time'], aero_destino)
+        camino_distancia = djk.pathTo(data_structs['caminos_comercial_distancia'], aero_destino)
+        
+        while not st.isEmpty(camino_distancia):
+            parada = st.pop(camino_distancia)
+            distancia_total = distancia_total + parada['weight']
+        
+        tiempo_total = 0
+        aeropuertos_visitados = []
+        while not st.isEmpty(camino_tiempo):
+            parada = st.pop(camino_tiempo)
+            tiempo_total = tiempo_total + parada['weight']
+            aeropuertos_visitados.append(parada['vertexA'])
+        
+        aeropuertos_visitados.append(aero_destino)
+        mapa_aeropuertos = mp.newMap()
+        
+        for aero in aeropuertos_visitados:
+            for coso in lt.iterator(data_structs['airports']):
+                if coso['ICAO'] == aero:
+                    mp.put(mapa_aeropuertos, aero, coso) 
+        
+        distancia_total = distancia_destino + distancia_origen
+        return res, aero_origen, aero_destino, aeropuertos_visitados, distancia_total, tiempo_total, mapa_aeropuertos 
     if aero_destino == None or aero_origen == None:
         res = False
         mas_cercano = 999
@@ -428,17 +428,12 @@ def req_1(data_structs, origen, destino):
         mapa_aeropuertos = None
         return res, aero_origen, aero_destino, aeropuertos_visitados, distancia_total, tiempo_total, mapa_aeropuertos
          
-            
-    
-    
-    
 def req_2(data_structs):
     """
     Función que soluciona el requerimiento 2
     """
     # TODO: Realizar el requerimiento 2
     pass
-
 
 def req_3(data_structs):
     """
@@ -477,7 +472,6 @@ def req_3(data_structs):
         
     
     return llave_primer, distancia_total, trayectos
-
 
 def req_4(data_structs):
     """
@@ -524,14 +518,12 @@ def req_4(data_structs):
     
     return llave_primer, distancia_total, trayectos
 
-
 def req_5(data_structs):
     """
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
     pass
-
 
 def req_6(data_structs, n_aeropuertos):
     """
@@ -591,18 +583,75 @@ def req_6(data_structs, n_aeropuertos):
     
     return llave_primer, respuesta
          
-        
-    
-    
-    
-    
 
-def req_7(data_structs):
+def req_7(data_structs, origen, destino):
     """
     Función que soluciona el requerimiento 7
     """
     # TODO: Realizar el requerimiento 7
-    pass
+    distancia_total = 0
+    tiempo_total = 0
+    aero_origen = None
+    aero_destino = None
+    res = False  
+    for aeropuerto in data_structs['coords']:
+        distancia_origen = haversine(origen, data_structs['coords'][aeropuerto])
+        distancia_destino = haversine(destino, data_structs['coords'][aeropuerto])
+        if distancia_origen <= 30:
+            aero_origen = aeropuerto
+            
+        if distancia_destino <= 30:
+            aero_destino = aeropuerto
+          
+    if aero_destino != None and aero_origen != None:
+        distancia_total = distancia_total + distancia_origen + distancia_destino
+        data_structs['caminos_comercial_time'] = djk.Dijkstra(data_structs['graph_comercial_time'], aero_origen)
+        res = djk.hasPathTo(data_structs['caminos_comercial_time'], aero_destino)
+        if res == True:
+            camino_tiempo = djk.pathTo(data_structs['caminos_comercial_time'], aero_destino)
+            
+            aeropuertos_camino = lt.newList('ARRAY_LIST')
+            lt.addLast(aeropuertos_camino, aero_origen)
+            while not st.isEmpty(camino_tiempo):
+                arco = st.pop(camino_tiempo)
+                tiempo_total = tiempo_total + arco['weight']
+                distancia_entre = haversine(data_structs['coords'][arco['vertexA']], data_structs['coords'][arco['vertexB']])
+                distancia_total = distancia_total + distancia_entre
+                lt.addLast(aeropuertos_camino, arco['vertexB'])
+            datos_aeropuertos = lt.newList('ARRAY_LIST')
+            for aeropuerto in lt.iterator(aeropuertos_camino):
+                aero = mp.get(data_structs['mapa_aeropuertos'], aeropuerto)
+                datos = me.getValue(aero)
+                dic = {
+                    'ICAO: ' : datos['ICAO'],
+                    'Nombre del aeropuerto: ' : datos['NOMBRE'],
+                    'Ciudad del aeropuerto: ' : datos['CIUDAD'],
+                    "Pais del aeropuerto: " : datos['PAIS']
+                }
+                lt.addLast(datos_aeropuertos, dic)
+        return res, aero_origen, aero_destino, datos_aeropuertos, tiempo_total, distancia_total 
+    if aero_destino == None or aero_origen == None:
+        res = False
+        mas_cercano = 999
+        mas_cercano_d = 999
+        for aeropuerto in data_structs['coords']:
+            distancia_o = haversine(origen, data_structs['coords'][aeropuerto])
+            if distancia_o < mas_cercano:
+                mas_cercano = distancia_o
+                aero_origen = aeropuerto
+            distancia_d = haversine(destino, data_structs['coords'][aeropuerto])
+            if distancia_d < mas_cercano_d:
+                mas_cercano_d = distancia_d
+                aero_destino = aeropuerto   
+        
+        datos_aeropuertos = None
+        tiempo_total = None
+        distancia_total = None
+        return res, aero_origen, aero_destino, datos_aeropuertos, tiempo_total, distancia_total
+    
+                
+                
+    
 
 
 def req_8(data_structs):
