@@ -607,6 +607,7 @@ def req_7(data_structs, origen, destino):
         distancia_total = distancia_total + distancia_origen + distancia_destino
         data_structs['caminos_comercial_time'] = djk.Dijkstra(data_structs['graph_comercial_time'], aero_origen)
         res = djk.hasPathTo(data_structs['caminos_comercial_time'], aero_destino)
+        datos_aeropuertos = lt.newList('ARRAY_LIST')
         if res == True:
             camino_tiempo = djk.pathTo(data_structs['caminos_comercial_time'], aero_destino)
             
@@ -618,7 +619,7 @@ def req_7(data_structs, origen, destino):
                 distancia_entre = haversine(data_structs['coords'][arco['vertexA']], data_structs['coords'][arco['vertexB']])
                 distancia_total = distancia_total + distancia_entre
                 lt.addLast(aeropuertos_camino, arco['vertexB'])
-            datos_aeropuertos = lt.newList('ARRAY_LIST')
+            
             for aeropuerto in lt.iterator(aeropuertos_camino):
                 aero = mp.get(data_structs['mapa_aeropuertos'], aeropuerto)
                 datos = me.getValue(aero)
