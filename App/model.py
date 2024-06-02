@@ -65,8 +65,6 @@ def new_data_structs():
     #TODO: Inicializar las estructuras de datos
     data_structs = {
         'airports':None,
-        'dic_airports': mp.newMap(numelements=2000,
-                                              maptype='PROBING'),
         'flights': None,
         'graph_time':gr.newGraph(datastructure='ADJ_LIST',
                                               directed=True,
@@ -499,8 +497,7 @@ def req_4(data_structs):
                 llave_vuelos = mp.get(data_structs['mapa_conexiones_aeropuertos'], aero['vertexA'])
                 for vuelo in lt.iterator(me.getValue(llave_vuelos)):
                     if vuelo['DESTINO'] == aero['vertexB']:
-                        lista_aviones.append(vuelo['TIPO_AERONAVE'])
-                
+                        lista_aviones.append(vuelo['TIPO_AERONAVE'])               
             tiempo_trayecto = 0
             while not st.isEmpty(tiempo_aeropuerto):
                 aero = st.pop(tiempo_aeropuerto)
@@ -514,8 +511,6 @@ def req_4(data_structs):
                 'lista_aviones' : lista_aviones
             }
             lt.addLast(trayectos, dic)
-            
-    
     return llave_primer, distancia_total, trayectos
 
 def req_5(data_structs):
@@ -541,10 +536,10 @@ def req_6(data_structs, n_aeropuertos):
     while i < n_aeropuertos + 1:
         lt.addLast(nombres_n_aeropuertos, nombres_aeropuertos[i])
         i += 1
-    print(nombres_n_aeropuertos)
+
     for aeropuerto in lt.iterator(nombres_n_aeropuertos):
         existe = djk.hasPathTo(data_structs['caminos_comercial_distancia'], aeropuerto)
-        if existe != None:
+        if existe != False:
             camino_aeropuerto = djk.pathTo(data_structs['caminos_comercial_distancia'], aeropuerto)
             vuelos_camino = lt.newList('ARRAY_LIST')
             aeropuertos_camino = lt.newList('ARRAY_LIST')
@@ -606,6 +601,7 @@ def req_7(data_structs, origen, destino):
     if aero_destino != None and aero_origen != None:
         distancia_total = distancia_total + distancia_origen + distancia_destino
         data_structs['caminos_comercial_time'] = djk.Dijkstra(data_structs['graph_comercial_time'], aero_origen)
+        
         res = djk.hasPathTo(data_structs['caminos_comercial_time'], aero_destino)
         datos_aeropuertos = lt.newList('ARRAY_LIST')
         if res == True:

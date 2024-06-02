@@ -163,7 +163,7 @@ def print_req_1(control, origen, destino):
 def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
-    """
+    """ 
     # TODO: Imprimir el resultado del requerimiento 2
     pass
 
